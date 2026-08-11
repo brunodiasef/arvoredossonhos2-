@@ -6,21 +6,12 @@
 <title>Árvore dos Sonhos</title>
 <style>
   :root {
-    --bg1: #0b3d2e;
-    --bg2: #1a5c40;
-    --leaf: #3cb371;
-    --leaf2: #2e8b57;
     --gold: #f4c542;
     --cream: #fff8e7;
-    --bark: #6b3e26;
-    --bark2: #8b5a2b;
-    --root: #5c4033;
     --card: rgba(255,255,255,0.95);
     --shadow: 0 10px 30px rgba(0,0,0,.25);
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
   body {
     font-family: "Segoe UI", system-ui, sans-serif;
     min-height: 100vh;
@@ -31,8 +22,6 @@
       linear-gradient(165deg, #0a2f24 0%, #145a3c 45%, #0b3d2e 100%);
     overflow-x: hidden;
   }
-
-  /* sky / stars */
   body::before {
     content: "";
     position: fixed;
@@ -41,478 +30,175 @@
       radial-gradient(1.5px 1.5px at 10% 20%, rgba(255,255,255,.5), transparent),
       radial-gradient(1px 1px at 30% 10%, rgba(255,255,255,.4), transparent),
       radial-gradient(1.5px 1.5px at 70% 15%, rgba(255,255,255,.45), transparent),
-      radial-gradient(1px 1px at 85% 25%, rgba(255,255,255,.35), transparent),
-      radial-gradient(1px 1px at 50% 5%, rgba(255,255,255,.3), transparent);
+      radial-gradient(1px 1px at 85% 25%, rgba(255,255,255,.35), transparent);
     pointer-events: none;
     z-index: 0;
   }
-
-  .app {
-    position: relative;
-    z-index: 1;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px 16px 60px;
-  }
-
-  header {
-    text-align: center;
-    margin-bottom: 18px;
-  }
-
+  .app { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 20px 16px 60px; }
+  header { text-align: center; margin-bottom: 12px; }
   header h1 {
     font-size: clamp(1.6rem, 4vw, 2.4rem);
     color: var(--gold);
     text-shadow: 0 2px 12px rgba(0,0,0,.4);
-    letter-spacing: 1px;
   }
-
-  header p {
-    color: rgba(255,248,231,.85);
-    margin-top: 6px;
-    font-size: .95rem;
+  header p { color: rgba(255,248,231,.85); margin-top: 6px; font-size: .95rem; }
+  .status-bar {
+    display: flex; gap: 10px; justify-content: center; align-items: center;
+    flex-wrap: wrap; margin: 10px 0 4px;
   }
-
-  .tabs {
-    display: flex;
-    gap: 8px;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin: 18px 0 22px;
+  .status-pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 12px; border-radius: 999px; font-size: .82rem; font-weight: 700;
+    background: rgba(0,0,0,.28); color: var(--cream); border: 1px solid rgba(255,255,255,.15);
   }
-
+  .status-dot {
+    width: 9px; height: 9px; border-radius: 50%; background: #95a5a6;
+    box-shadow: 0 0 0 3px rgba(149,165,166,.25);
+  }
+  .status-pill.online .status-dot { background: #2ecc71; box-shadow: 0 0 0 3px rgba(46,204,113,.28); }
+  .status-pill.offline .status-dot { background: #e74c3c; box-shadow: 0 0 0 3px rgba(231,76,60,.28); }
+  .status-pill.loading .status-dot {
+    background: #f4c542; box-shadow: 0 0 0 3px rgba(244,197,66,.28); animation: pulse 1s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.45} }
+  .tabs { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin: 16px 0 22px; }
   .tab-btn {
-    border: 2px solid rgba(244,197,66,.5);
-    background: rgba(0,0,0,.25);
-    color: var(--cream);
-    padding: 10px 18px;
-    border-radius: 999px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: .2s;
+    border: 2px solid rgba(244,197,66,.5); background: rgba(0,0,0,.25); color: var(--cream);
+    padding: 10px 18px; border-radius: 999px; cursor: pointer; font-weight: 600; transition: .2s;
   }
-
   .tab-btn:hover { background: rgba(244,197,66,.15); }
-  .tab-btn.active {
-    background: var(--gold);
-    color: #1a2e22;
-    border-color: var(--gold);
-  }
-
+  .tab-btn.active { background: var(--gold); color: #1a2e22; border-color: var(--gold); }
   .panel { display: none; animation: fadeIn .35s ease; }
   .panel.active { display: block; }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: none; }
-  }
-
-  .card {
-    background: var(--card);
-    border-radius: 18px;
-    padding: 20px;
-    box-shadow: var(--shadow);
-  }
-
-  .grid-2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-  }
-
-  @media (max-width: 800px) {
-    .grid-2 { grid-template-columns: 1fr; }
-  }
-
-  label {
-    display: block;
-    font-size: .82rem;
-    font-weight: 700;
-    color: #2d5a3f;
-    margin-bottom: 4px;
-    margin-top: 10px;
-  }
-
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  .card { background: var(--card); border-radius: 18px; padding: 20px; box-shadow: var(--shadow); }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 800px) { .grid-2 { grid-template-columns: 1fr; } }
+  label { display: block; font-size: .82rem; font-weight: 700; color: #2d5a3f; margin: 10px 0 4px; }
   input, textarea, select {
-    width: 100%;
-    border: 2px solid #cde5d6;
-    border-radius: 10px;
-    padding: 10px 12px;
-    font: inherit;
-    background: #f7fff9;
-    outline: none;
-    transition: border .15s;
+    width: 100%; border: 2px solid #cde5d6; border-radius: 10px; padding: 10px 12px;
+    font: inherit; background: #f7fff9; outline: none;
   }
-
-  input:focus, textarea:focus, select:focus {
-    border-color: #3cb371;
-  }
-
+  input:focus, textarea:focus, select:focus { border-color: #3cb371; }
   textarea { min-height: 72px; resize: vertical; }
-
   .btn {
-    border: none;
-    border-radius: 12px;
-    padding: 11px 18px;
-    font-weight: 700;
-    cursor: pointer;
-    font: inherit;
-    transition: .15s transform, .15s filter;
+    border: none; border-radius: 12px; padding: 11px 18px; font-weight: 700;
+    cursor: pointer; font: inherit; transition: .15s;
   }
-
   .btn:hover { filter: brightness(1.05); transform: translateY(-1px); }
-  .btn:active { transform: translateY(0); }
-
-  .btn-primary {
-    background: linear-gradient(135deg, #2e8b57, #1f6b4a);
-    color: white;
-  }
-
-  .btn-gold {
-    background: linear-gradient(135deg, #f4c542, #e0a800);
-    color: #1a2e22;
-  }
-
-  .btn-danger {
-    background: #c0392b;
-    color: white;
-  }
-
-  .btn-ghost {
-    background: transparent;
-    border: 2px solid #2e8b57;
-    color: #1f6b4a;
-  }
-
-  .btn-row {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-top: 16px;
-  }
-
-  .students-list {
-    display: grid;
-    gap: 10px;
-    max-height: 520px;
-    overflow: auto;
-  }
-
+  .btn:disabled { opacity: .55; cursor: not-allowed; transform: none; filter: none; }
+  .btn-primary { background: linear-gradient(135deg, #2e8b57, #1f6b4a); color: white; }
+  .btn-gold { background: linear-gradient(135deg, #f4c542, #e0a800); color: #1a2e22; }
+  .btn-danger { background: #c0392b; color: white; }
+  .btn-ghost { background: transparent; border: 2px solid #2e8b57; color: #1f6b4a; }
+  .btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+  .students-list { display: grid; gap: 10px; max-height: 520px; overflow: auto; }
   .student-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    padding: 12px 14px;
-    border-radius: 12px;
-    background: linear-gradient(90deg, #e8f8ee, #f7fff9);
-    border: 1px solid #cde5d6;
-    cursor: pointer;
-    transition: .15s;
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    padding: 12px 14px; border-radius: 12px;
+    background: linear-gradient(90deg, #e8f8ee, #f7fff9); border: 1px solid #cde5d6; cursor: pointer;
   }
-
-  .student-item:hover { border-color: #3cb371; box-shadow: 0 4px 12px rgba(46,139,87,.15); }
+  .student-item:hover { border-color: #3cb371; }
   .student-item.selected {
-    border-color: #f4c542;
-    background: linear-gradient(90deg, #fff6d6, #fffdf2);
+    border-color: #f4c542; background: linear-gradient(90deg, #fff6d6, #fffdf2);
     box-shadow: 0 0 0 2px rgba(244,197,66,.35);
   }
-
   .student-item .meta { font-size: .85rem; color: #4a6b58; }
   .student-item strong { color: #145a3c; }
-
   .badge {
-    display: inline-block;
-    background: #2e8b57;
-    color: white;
-    font-size: .72rem;
-    padding: 3px 8px;
-    border-radius: 999px;
-    font-weight: 700;
+    display: inline-block; background: #2e8b57; color: white; font-size: .72rem;
+    padding: 3px 8px; border-radius: 999px; font-weight: 700;
   }
-
   .badge.empty { background: #95a5a6; }
-
-  .counter {
-    text-align: center;
-    color: var(--cream);
-    margin-bottom: 10px;
-    font-weight: 600;
-  }
-
-  /* ============ TREE VIEW ============ */
+  .counter { text-align: center; color: var(--cream); margin-bottom: 10px; font-weight: 600; }
   .tree-wrap {
     position: relative;
     background: linear-gradient(180deg, #87ceeb 0%, #b8e0f0 35%, #d4edda 70%, #8fbc8f 100%);
-    border-radius: 22px;
-    padding: 16px 12px 28px;
-    box-shadow: var(--shadow);
-    overflow: hidden;
-    min-height: 720px;
+    border-radius: 22px; padding: 16px 12px 28px; box-shadow: var(--shadow);
+    overflow: hidden; min-height: 720px;
   }
-
-  .tree-wrap::after {
-    content: "";
-    position: absolute;
-    left: 0; right: 0; bottom: 0;
-    height: 70px;
-    background: linear-gradient(180deg, transparent, rgba(92,64,51,.25));
-    pointer-events: none;
-  }
-
   .tree-motto {
-    text-align: center;
-    font-size: clamp(1rem, 2.8vw, 1.45rem);
-    font-weight: 800;
-    color: #145a3c;
-    letter-spacing: .5px;
-    text-shadow: 0 1px 0 rgba(255,255,255,.7);
-    margin: 6px 0 8px;
-    padding: 8px 12px;
-    background: rgba(255,255,255,.55);
-    border-radius: 999px;
-    border: 2px dashed #f4c542;
-    display: inline-block;
-    width: 100%;
+    text-align: center; font-size: clamp(1rem, 2.8vw, 1.45rem); font-weight: 800; color: #145a3c;
+    margin: 6px 0 8px; padding: 8px 12px; background: rgba(255,255,255,.55);
+    border-radius: 999px; border: 2px dashed #f4c542; width: 100%;
   }
-
-  .student-banner {
-    text-align: center;
-    margin-bottom: 8px;
-    font-weight: 700;
-    color: #1a3d2a;
-    font-size: 1.05rem;
-  }
-
-  .tree-stage {
-    position: relative;
-    width: 100%;
-    max-width: 680px;
-    margin: 0 auto;
-    height: 620px;
-  }
-
-  /* SVG tree base */
-  .tree-svg {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-  }
-
-  /* Zones */
-  .zone {
-    position: absolute;
-    z-index: 2;
-  }
-
+  .student-banner { text-align: center; margin-bottom: 8px; font-weight: 700; color: #1a3d2a; font-size: 1.05rem; }
+  .tree-stage { position: relative; width: 100%; max-width: 680px; margin: 0 auto; height: 620px; }
+  .tree-svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  .zone { position: absolute; z-index: 2; }
   .zone-label {
-    font-size: .72rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: .4px;
-    color: #fff;
-    background: rgba(0,0,0,.45);
-    padding: 3px 8px;
-    border-radius: 6px;
-    margin-bottom: 4px;
-    display: inline-block;
-    text-shadow: 0 1px 2px rgba(0,0,0,.4);
+    font-size: .72rem; font-weight: 800; text-transform: uppercase; color: #fff;
+    background: rgba(0,0,0,.45); padding: 3px 8px; border-radius: 6px; margin-bottom: 4px; display: inline-block;
   }
-
-  .zone-roots {
-    left: 50%;
-    bottom: 8px;
-    transform: translateX(-50%);
-    width: min(92%, 420px);
-    text-align: center;
-  }
-
-  .zone-trunk {
-    left: 50%;
-    top: 52%;
-    transform: translateX(-50%);
-    width: min(46%, 200px);
-    text-align: center;
-  }
-
-  .zone-branches {
-    left: 50%;
-    top: 28%;
-    transform: translateX(-50%);
-    width: min(88%, 480px);
-    text-align: center;
-  }
-
-  .zone-leaves {
-    left: 50%;
-    top: 2%;
-    transform: translateX(-50%);
-    width: min(96%, 560px);
-    text-align: center;
-  }
-
-  .chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    justify-content: center;
-    min-height: 28px;
-  }
-
+  .zone-roots { left: 50%; bottom: 8px; transform: translateX(-50%); width: min(92%, 420px); text-align: center; }
+  .zone-trunk { left: 50%; top: 52%; transform: translateX(-50%); width: min(46%, 200px); text-align: center; }
+  .zone-branches { left: 50%; top: 28%; transform: translateX(-50%); width: min(88%, 480px); text-align: center; }
+  .zone-leaves { left: 50%; top: 2%; transform: translateX(-50%); width: min(96%, 560px); text-align: center; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; min-height: 28px; }
   .chip {
-    background: rgba(255,255,255,.92);
-    border: 1px solid rgba(0,0,0,.08);
-    border-radius: 999px;
-    padding: 5px 10px;
-    font-size: .78rem;
-    font-weight: 600;
-    color: #1a3d2a;
-    box-shadow: 0 2px 6px rgba(0,0,0,.12);
-    max-width: 100%;
-    word-break: break-word;
+    background: rgba(255,255,255,.92); border: 1px solid rgba(0,0,0,.08); border-radius: 999px;
+    padding: 5px 10px; font-size: .78rem; font-weight: 600; color: #1a3d2a;
+    box-shadow: 0 2px 6px rgba(0,0,0,.12); max-width: 100%; word-break: break-word;
   }
-
   .chip.root { background: #efe0d0; border-color: #c4a484; }
   .chip.trunk { background: #f5e6d3; border-color: #c9a66b; }
   .chip.branch { background: #d4edda; border-color: #82c99a; }
   .chip.leaf {
-    background: linear-gradient(145deg, #7dcea0, #52b788);
-    color: #0b2e1c;
-    border-color: #2d6a4f;
+    background: linear-gradient(145deg, #7dcea0, #52b788); color: #0b2e1c; border-color: #2d6a4f;
     animation: floatLeaf 3.5s ease-in-out infinite;
   }
-
   .chip.leaf:nth-child(odd) { animation-delay: .4s; }
-  .chip.leaf:nth-child(3n) { animation-delay: 1.1s; }
-
-  @keyframes floatLeaf {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-4px); }
-  }
-
+  @keyframes floatLeaf { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
   .empty-hint {
-    font-size: .78rem;
-    color: rgba(26,61,42,.65);
-    font-style: italic;
-    background: rgba(255,255,255,.4);
-    padding: 4px 8px;
-    border-radius: 8px;
+    font-size: .78rem; color: rgba(26,61,42,.65); font-style: italic;
+    background: rgba(255,255,255,.4); padding: 4px 8px; border-radius: 8px;
   }
-
-  /* dream picker */
-  .section-title {
-    font-size: 1.1rem;
-    color: #145a3c;
-    margin-bottom: 8px;
-    font-weight: 800;
-  }
-
-  .hint {
-    font-size: .88rem;
-    color: #4a6b58;
-    margin-bottom: 12px;
-  }
-
-  .cat {
-    margin-bottom: 14px;
-  }
-
-  .cat h3 {
-    font-size: .95rem;
-    margin-bottom: 8px;
-    color: #1f6b4a;
-  }
-
-  .dream-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-    gap: 8px;
-  }
-
+  .section-title { font-size: 1.1rem; color: #145a3c; margin-bottom: 8px; font-weight: 800; }
+  .hint { font-size: .88rem; color: #4a6b58; margin-bottom: 12px; }
+  .cat { margin-bottom: 14px; }
+  .cat h3 { font-size: .95rem; margin-bottom: 8px; color: #1f6b4a; }
+  .dream-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 8px; }
   .dream-opt {
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
-    padding: 10px;
-    border-radius: 12px;
-    border: 2px solid #d5eadc;
-    background: #f7fff9;
-    cursor: pointer;
-    font-size: .88rem;
-    transition: .15s;
-    user-select: none;
+    display: flex; align-items: flex-start; gap: 8px; padding: 10px; border-radius: 12px;
+    border: 2px solid #d5eadc; background: #f7fff9; cursor: pointer; font-size: .88rem; user-select: none;
   }
-
   .dream-opt:hover { border-color: #3cb371; }
-  .dream-opt.selected {
-    border-color: #f4c542;
-    background: #fff8dc;
-    box-shadow: 0 0 0 2px rgba(244,197,66,.25);
-  }
-
+  .dream-opt.selected { border-color: #f4c542; background: #fff8dc; }
   .dream-opt input { width: auto; margin-top: 2px; accent-color: #2e8b57; }
-
   .limit-note {
-    background: #fff3cd;
-    border: 1px solid #ffecb5;
-    color: #664d03;
-    padding: 10px 12px;
-    border-radius: 10px;
-    font-size: .88rem;
-    margin-bottom: 12px;
+    background: #fff3cd; border: 1px solid #ffecb5; color: #664d03;
+    padding: 10px 12px; border-radius: 10px; font-size: .88rem; margin-bottom: 12px;
   }
-
-  .print-only { display: none; }
-
+  .select-student { max-width: 360px; margin: 0 auto 12px; }
+  .actions-bar { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 14px; }
+  .toast {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
+    background: #1a3d2a; color: white; padding: 12px 20px; border-radius: 999px; font-weight: 600;
+    box-shadow: var(--shadow); opacity: 0; transition: .3s; z-index: 100; pointer-events: none;
+    max-width: 90vw; text-align: center;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .toast.error { background: #8b1e1e; }
+  .loading-overlay {
+    position: fixed; inset: 0; background: rgba(8,30,22,.55); display: none;
+    align-items: center; justify-content: center; z-index: 90; color: white; font-weight: 700;
+  }
+  .loading-overlay.show { display: flex; }
+  .loading-box {
+    background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2);
+    padding: 18px 28px; border-radius: 16px;
+  }
   @media print {
     body { background: white; }
-    body::before, .tabs, .no-print { display: none !important; }
+    body::before, .tabs, .no-print, .status-bar, .loading-overlay, .toast { display: none !important; }
     .panel { display: none !important; }
     .panel#panel-arvore { display: block !important; }
     .tree-wrap {
       box-shadow: none;
       background: linear-gradient(180deg, #cceeff, #e8f8ee 60%, #c8e6c9);
-      -webkit-print-color-adjust: exact;
-      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact; print-color-adjust: exact;
     }
     .app { max-width: 100%; padding: 0; }
-  }
-
-  .toast {
-    position: fixed;
-    bottom: 24px;
-    left: 50%;
-    transform: translateX(-50%) translateY(80px);
-    background: #1a3d2a;
-    color: white;
-    padding: 12px 20px;
-    border-radius: 999px;
-    font-weight: 600;
-    box-shadow: var(--shadow);
-    opacity: 0;
-    transition: .3s;
-    z-index: 100;
-    pointer-events: none;
-  }
-
-  .toast.show {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-
-  .actions-bar {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-top: 14px;
-  }
-
-  .select-student {
-    max-width: 360px;
-    margin: 0 auto 12px;
   }
 </style>
 </head>
@@ -520,8 +206,16 @@
 <div class="app">
   <header>
     <h1>🌳 Árvore dos Sonhos</h1>
-    <p>Cadastre até 20 alunos e monte a árvore de cada um</p>
+    <p>Cadastre até 20 alunos · dados salvos online no Firebase</p>
   </header>
+
+  <div class="status-bar no-print">
+    <div class="status-pill loading" id="cloudStatus">
+      <span class="status-dot"></span>
+      <span id="cloudStatusText">Conectando ao Firebase...</span>
+    </div>
+    <button class="btn btn-ghost" id="btnReload" style="background:rgba(255,255,255,.9);padding:8px 14px;font-size:.85rem;">🔄 Atualizar da nuvem</button>
+  </div>
 
   <div class="tabs no-print">
     <button class="tab-btn active" data-tab="alunos">👥 Alunos</button>
@@ -529,30 +223,26 @@
     <button class="tab-btn" data-tab="arvore">🌲 Ver árvore</button>
   </div>
 
-  <!-- ALUNOS -->
   <section id="panel-alunos" class="panel active">
     <div class="counter" id="studentCounter">0 / 20 alunos cadastrados</div>
     <div class="grid-2">
       <div class="card">
         <div class="section-title">Cadastrar aluno</div>
-        <p class="hint">Preencha os dados básicos. Depois monte a árvore na aba seguinte.</p>
+        <p class="hint">Os dados são salvos automaticamente na nuvem (Firebase).</p>
         <form id="studentForm">
           <label for="nome">Nome do aluno *</label>
           <input id="nome" required maxlength="60" placeholder="Ex.: Ana Silva" />
-
           <label for="turma">Turma / série</label>
           <input id="turma" maxlength="40" placeholder="Ex.: 5º ano A" />
-
           <label for="idade">Idade</label>
           <input id="idade" type="number" min="5" max="25" placeholder="Ex.: 10" />
-
           <div class="btn-row">
             <button type="submit" class="btn btn-primary" id="btnSaveStudent">Salvar aluno</button>
             <button type="button" class="btn btn-ghost" id="btnClearForm">Limpar</button>
+            <button type="button" class="btn btn-ghost" id="btnLoadEdit">Editar dados do selecionado</button>
           </div>
         </form>
       </div>
-
       <div class="card">
         <div class="section-title">Lista de alunos</div>
         <p class="hint">Clique em um aluno para selecioná-lo e montar a árvore dele.</p>
@@ -561,7 +251,6 @@
     </div>
   </section>
 
-  <!-- MONTAR -->
   <section id="panel-montar" class="panel">
     <div class="card">
       <div class="section-title">Montar a árvore</div>
@@ -569,93 +258,66 @@
         <label for="selStudent">Aluno selecionado</label>
         <select id="selStudent"></select>
       </div>
-
       <div id="editorEmpty" class="hint" style="text-align:center;padding:30px 10px;">
         Cadastre e selecione um aluno para começar.
       </div>
-
       <div id="editor" style="display:none;">
-        <!-- Raízes -->
         <div style="margin-bottom:18px;padding:14px;border-radius:14px;background:#f3e9df;border:1px solid #e0cbb0;">
           <h3>🌱 Raízes — “Quem sou eu?”</h3>
           <p class="hint">Valores, família, amizades…</p>
           <label for="raizes">Escreva quem você é</label>
-          <textarea id="raizes" placeholder="Ex.: Sou filho(a) dedicado(a), gosto de ajudar os amigos, valorizo a honestidade..."></textarea>
+          <textarea id="raizes" placeholder="Ex.: Sou filho(a) dedicado(a), gosto de ajudar os amigos..."></textarea>
         </div>
-
-        <!-- Tronco -->
         <div style="margin-bottom:18px;padding:14px;border-radius:14px;background:#efe4d4;border:1px solid #d4b896;">
           <h3>🪵 Tronco — “O que estou fazendo para crescer?”</h3>
           <p class="hint">Estudos, esforço, dedicação…</p>
           <label for="tronco">O que você está fazendo para crescer</label>
-          <textarea id="tronco" placeholder="Ex.: Estudo todos os dias, faço as lições, leio livros, treino foco..."></textarea>
+          <textarea id="tronco" placeholder="Ex.: Estudo todos os dias, faço as lições..."></textarea>
         </div>
-
-        <!-- Galhos -->
         <div style="margin-bottom:18px;padding:14px;border-radius:14px;background:#e3f5e9;border:1px solid #a8d5b5;">
           <h3>🌿 Galhos — “Onde quero chegar?”</h3>
           <p class="hint">Seus objetivos de vida e de estudos…</p>
           <label for="galhos">Seus objetivos</label>
-          <textarea id="galhos" placeholder="Ex.: Quero concluir a escola, entrar na faculdade, ser uma pessoa melhor..."></textarea>
+          <textarea id="galhos" placeholder="Ex.: Quero concluir a escola, entrar na faculdade..."></textarea>
         </div>
-
-        <!-- Folhas / sonhos -->
         <div style="margin-bottom:10px;padding:14px;border-radius:14px;background:#e8f8ee;border:1px solid #9ed4b0;">
           <h3>🍃 Folhas — Escolha seus sonhos</h3>
-          <p class="hint">Marque os sonhos que quer colocar nas folhas da árvore. Recomendado: até 8 sonhos para a árvore ficar legível.</p>
+          <p class="hint">Marque os sonhos. Recomendado: até 8 para a árvore ficar legível.</p>
           <div class="limit-note" id="dreamCountNote">0 sonhos selecionados</div>
-
           <div id="dreamCategories"></div>
         </div>
-
         <div class="btn-row">
-          <button type="button" class="btn btn-primary" id="btnSaveTree">💾 Salvar árvore deste aluno</button>
+          <button type="button" class="btn btn-primary" id="btnSaveTree">💾 Salvar árvore na nuvem</button>
           <button type="button" class="btn btn-gold" id="btnGoTree">Ver árvore →</button>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ÁRVORE -->
   <section id="panel-arvore" class="panel">
     <div class="select-student no-print" style="max-width:360px;margin:0 auto 10px;">
       <label for="selStudentTree" style="color:var(--cream);">Ver árvore de:</label>
       <select id="selStudentTree"></select>
     </div>
-
-    <div class="tree-wrap" id="treeWrap">
+    <div class="tree-wrap">
       <div class="tree-motto">“MEUS SONHOS PODEM SE TORNAR REALIDADE!”</div>
       <div class="student-banner" id="treeStudentName">Selecione um aluno</div>
-
       <div class="tree-stage">
-        <!-- Decorative tree -->
         <svg class="tree-svg" viewBox="0 0 680 620" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-          <!-- ground -->
           <ellipse cx="340" cy="590" rx="220" ry="28" fill="#6b8e4e" opacity=".55"/>
           <ellipse cx="340" cy="595" rx="160" ry="16" fill="#5a7a40" opacity=".45"/>
-
-          <!-- roots -->
           <path d="M340 520 C300 540 250 560 200 575" stroke="#5c4033" stroke-width="14" fill="none" stroke-linecap="round"/>
           <path d="M340 520 C380 540 430 560 480 575" stroke="#5c4033" stroke-width="14" fill="none" stroke-linecap="round"/>
           <path d="M340 525 C310 550 280 570 250 585" stroke="#6b4a32" stroke-width="10" fill="none" stroke-linecap="round"/>
           <path d="M340 525 C370 550 400 570 430 585" stroke="#6b4a32" stroke-width="10" fill="none" stroke-linecap="round"/>
-          <path d="M340 530 C340 555 330 575 320 590" stroke="#4a3224" stroke-width="8" fill="none" stroke-linecap="round"/>
-
-          <!-- trunk -->
-          <path d="M310 520 C305 420 308 340 320 280 C325 250 330 230 340 210 C350 230 355 250 360 280 C372 340 375 420 370 520 Z"
-                fill="#8b5a2b"/>
-          <path d="M325 515 C322 420 326 350 335 290 C338 260 340 240 340 220 C342 240 344 260 347 290 C356 350 360 420 357 515 Z"
-                fill="#a67c52" opacity=".55"/>
-
-          <!-- main branches -->
+          <path d="M310 520 C305 420 308 340 320 280 C325 250 330 230 340 210 C350 230 355 250 360 280 C372 340 375 420 370 520 Z" fill="#8b5a2b"/>
+          <path d="M325 515 C322 420 326 350 335 290 C338 260 340 240 340 220 C342 240 344 260 347 290 C356 350 360 420 357 515 Z" fill="#a67c52" opacity=".55"/>
           <path d="M340 250 C280 230 220 200 170 170" stroke="#6b3e26" stroke-width="16" fill="none" stroke-linecap="round"/>
           <path d="M340 250 C400 230 460 200 510 170" stroke="#6b3e26" stroke-width="16" fill="none" stroke-linecap="round"/>
           <path d="M340 280 C260 270 200 250 140 230" stroke="#7a4a2e" stroke-width="12" fill="none" stroke-linecap="round"/>
           <path d="M340 280 C420 270 480 250 540 230" stroke="#7a4a2e" stroke-width="12" fill="none" stroke-linecap="round"/>
           <path d="M340 220 C300 180 270 140 250 100" stroke="#6b3e26" stroke-width="11" fill="none" stroke-linecap="round"/>
           <path d="M340 220 C380 180 410 140 430 100" stroke="#6b3e26" stroke-width="11" fill="none" stroke-linecap="round"/>
-
-          <!-- canopy blobs -->
           <ellipse cx="200" cy="150" rx="110" ry="80" fill="#2d8a4e" opacity=".92"/>
           <ellipse cx="480" cy="150" rx="110" ry="80" fill="#2d8a4e" opacity=".92"/>
           <ellipse cx="340" cy="95" rx="130" ry="95" fill="#34a05a" opacity=".95"/>
@@ -664,163 +326,204 @@
           <ellipse cx="340" cy="170" rx="100" ry="70" fill="#2e9b57" opacity=".75"/>
           <ellipse cx="160" cy="220" rx="70" ry="50" fill="#2d8a4e" opacity=".85"/>
           <ellipse cx="520" cy="220" rx="70" ry="50" fill="#2d8a4e" opacity=".85"/>
-
-          <!-- highlight leaves -->
-          <circle cx="180" cy="120" r="18" fill="#7dcea0" opacity=".5"/>
-          <circle cx="500" cy="125" r="16" fill="#7dcea0" opacity=".5"/>
-          <circle cx="340" cy="60" r="20" fill="#95d5b2" opacity=".45"/>
-          <circle cx="280" cy="160" r="14" fill="#95d5b2" opacity=".4"/>
-          <circle cx="400" cy="155" r="14" fill="#95d5b2" opacity=".4"/>
         </svg>
-
-        <!-- interactive zones over the drawing -->
         <div class="zone zone-leaves">
           <div class="zone-label">🍃 Folhas — Sonhos</div>
           <div class="chips" id="chipsLeaves"></div>
         </div>
-
         <div class="zone zone-branches">
           <div class="zone-label">🌿 Galhos — Onde quero chegar?</div>
           <div class="chips" id="chipsBranches"></div>
         </div>
-
         <div class="zone zone-trunk">
           <div class="zone-label">🪵 Tronco — Como cresço?</div>
           <div class="chips" id="chipsTrunk"></div>
         </div>
-
         <div class="zone zone-roots">
           <div class="zone-label">🌱 Raízes — Quem sou eu?</div>
           <div class="chips" id="chipsRoots"></div>
         </div>
       </div>
     </div>
-
     <div class="actions-bar no-print">
       <button class="btn btn-gold" id="btnPrint">🖨️ Imprimir / Salvar PDF</button>
       <button class="btn btn-primary" id="btnEditFromTree">✏️ Editar esta árvore</button>
-      <button class="btn btn-ghost" id="btnExport" style="background:rgba(255,255,255,.9);">⬇️ Exportar dados (JSON)</button>
+      <button class="btn btn-ghost" id="btnExport" style="background:rgba(255,255,255,.9);">⬇️ Exportar backup (JSON)</button>
       <label class="btn btn-ghost" style="background:rgba(255,255,255,.9);cursor:pointer;">
-        ⬆️ Importar JSON
+        ⬆️ Importar JSON para a nuvem
         <input type="file" id="importFile" accept="application/json,.json" hidden />
       </label>
     </div>
   </section>
 </div>
 
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-box" id="loadingText">Salvando na nuvem...</div>
+</div>
 <div class="toast" id="toast"></div>
 
-<script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+import {
+  getFirestore, collection, doc, getDocs, setDoc, deleteDoc, writeBatch, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCbbxSPxZIWKis84KQwCkgDkHg-4LiKBw8",
+  authDomain: "arvoredossonhos-94360.firebaseapp.com",
+  projectId: "arvoredossonhos-94360",
+  storageBucket: "arvoredossonhos-94360.firebasestorage.app",
+  messagingSenderId: "15095243957",
+  appId: "1:15095243957:web:0bc950ad6c20e6694a4afc"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const COL = "alunos";
+
 const MAX_STUDENTS = 20;
 const MAX_DREAMS_SOFT = 8;
+const SELECTED_KEY = "arvore-dos-sonhos-selected";
 
 const DREAMS = [
   { cat: "🎓 Estudos", items: [
-    "Melhorar minhas notas",
-    "Aprender mais",
-    "Concluir meus estudos",
-    "Fazer uma faculdade",
-    "Aprender outro idioma",
-    "Fazer um curso",
-    "Ler mais livros",
-    "Desenvolver novos conhecimentos",
-    "Ser destaque nos estudos",
-    "Melhorar em uma matéria",
+    "Melhorar minhas notas","Aprender mais","Concluir meus estudos","Fazer uma faculdade",
+    "Aprender outro idioma","Fazer um curso","Ler mais livros","Desenvolver novos conhecimentos",
+    "Ser destaque nos estudos","Melhorar em uma matéria"
   ]},
   { cat: "💼 Profissão e futuro", items: [
-    "Ser médico(a)",
-    "Ser professor(a)",
-    "Ser jogador(a) de futebol",
-    "Ser policial",
-    "Ser bombeiro(a)",
-    "Trabalhar com tecnologia",
-    "Trabalhar com arte",
-    "Ter meu próprio negócio",
-    "Ter um bom emprego",
-    "Trabalhar com o que eu gosto",
+    "Ser médico(a)","Ser professor(a)","Ser jogador(a) de futebol","Ser policial","Ser bombeiro(a)",
+    "Trabalhar com tecnologia","Trabalhar com arte","Ter meu próprio negócio","Ter um bom emprego",
+    "Trabalhar com o que eu gosto"
   ]},
   { cat: "❤️ Vida pessoal", items: [
-    "Ajudar minha família",
-    "Ter uma família feliz",
-    "Fazer bons amigos",
-    "Ser mais feliz",
-    "Fazer novas amizades",
-    "Acreditar mais em mim",
-    "Ser uma pessoa melhor",
-    "Ser mais confiante",
-    "Realizar meus sonhos",
-    "Viver em paz",
+    "Ajudar minha família","Ter uma família feliz","Fazer bons amigos","Ser mais feliz",
+    "Fazer novas amizades","Acreditar mais em mim","Ser uma pessoa melhor","Ser mais confiante",
+    "Realizar meus sonhos","Viver em paz"
   ]},
   { cat: "🌎 Experiências", items: [
-    "Viajar de avião",
-    "Conhecer outros países",
-    "Conhecer uma praia nova",
-    "Conhecer uma cidade diferente",
-    "Fazer uma grande viagem",
-    "Conhecer um parque de diversões",
-    "Assistir a um grande jogo",
-    "Ir a um show",
-    "Conhecer um lugar especial",
-    "Viver uma grande aventura",
+    "Viajar de avião","Conhecer outros países","Conhecer uma praia nova","Conhecer uma cidade diferente",
+    "Fazer uma grande viagem","Conhecer um parque de diversões","Assistir a um grande jogo","Ir a um show",
+    "Conhecer um lugar especial","Viver uma grande aventura"
   ]},
   { cat: "💪 Superação e crescimento", items: [
-    "Alcançar meus objetivos",
-    "Não desistir dos meus sonhos",
-    "Crescer como pessoa",
-    "Superar meus desafios",
-    "Ter mais determinação",
-    "Ser mais organizado(a)",
-    "Ter mais foco",
-    "Desenvolver meus talentos",
-    "Vencer meus medos",
-    "Fazer meu sonho acontecer",
+    "Alcançar meus objetivos","Não desistir dos meus sonhos","Crescer como pessoa","Superar meus desafios",
+    "Ter mais determinação","Ser mais organizado(a)","Ter mais foco","Desenvolver meus talentos",
+    "Vencer meus medos","Fazer meu sonho acontecer"
   ]},
 ];
 
-const STORAGE_KEY = "arvore-dos-sonhos-v1";
-
-/** @type {{id:string,nome:string,turma:string,idade:string,raizes:string,tronco:string,galhos:string,sonhos:string[]}[]} */
 let students = [];
-let selectedId = null;
-let editingId = null; // when editing existing student form
+let selectedId = localStorage.getItem(SELECTED_KEY) || null;
+let editingId = null;
+let cloudReady = false;
 
 function uid() {
   return "a_" + Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
 }
 
-function load() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) {
-      const data = JSON.parse(raw);
-      students = Array.isArray(data.students) ? data.students : [];
-      selectedId = data.selectedId || (students[0] && students[0].id) || null;
-    }
-  } catch (e) {
-    students = [];
-  }
+function setStatus(state, text) {
+  const pill = document.getElementById("cloudStatus");
+  const label = document.getElementById("cloudStatusText");
+  pill.classList.remove("online", "offline", "loading");
+  pill.classList.add(state);
+  label.textContent = text;
 }
 
-function save() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify({ students, selectedId }));
+function setLoading(show, text) {
+  document.getElementById("loadingText").textContent = text || "Aguarde...";
+  document.getElementById("loadingOverlay").classList.toggle("show", !!show);
 }
 
-function toast(msg) {
+function toast(msg, isError) {
   const el = document.getElementById("toast");
   el.textContent = msg;
+  el.classList.toggle("error", !!isError);
   el.classList.add("show");
   clearTimeout(toast._t);
-  toast._t = setTimeout(() => el.classList.remove("show"), 2400);
+  toast._t = setTimeout(() => el.classList.remove("show"), 2800);
+}
+
+function rememberSelected() {
+  if (selectedId) localStorage.setItem(SELECTED_KEY, selectedId);
+  else localStorage.removeItem(SELECTED_KEY);
 }
 
 function splitLines(text) {
-  return String(text || "")
-    .split(/\n|;|•|\u2022/)
-    .map(s => s.trim())
-    .filter(Boolean);
+  return String(text || "").split(/\n|;|•|\u2022/).map(s => s.trim()).filter(Boolean);
 }
 
-/* ---------- Tabs ---------- */
+function studentPayload(st) {
+  return {
+    nome: st.nome || "",
+    turma: st.turma || "",
+    idade: st.idade || "",
+    raizes: st.raizes || "",
+    tronco: st.tronco || "",
+    galhos: st.galhos || "",
+    sonhos: Array.isArray(st.sonhos) ? st.sonhos : [],
+    updatedAt: serverTimestamp()
+  };
+}
+
+function normalizeStudent(id, data) {
+  return {
+    id,
+    nome: String(data.nome || "Sem nome").slice(0, 60),
+    turma: String(data.turma || "").slice(0, 40),
+    idade: String(data.idade || ""),
+    raizes: String(data.raizes || ""),
+    tronco: String(data.tronco || ""),
+    galhos: String(data.galhos || ""),
+    sonhos: Array.isArray(data.sonhos) ? data.sonhos.map(String) : []
+  };
+}
+
+function friendlyError(err) {
+  const code = String((err && (err.code || err.message)) || "");
+  if (code.includes("permission") || code.includes("Permission")) {
+    return "Sem permissão no Firestore. Publique as regras de teste no Firebase.";
+  }
+  if (code.includes("unavailable") || !navigator.onLine) {
+    return "Sem internet ou Firebase indisponível no momento.";
+  }
+  return "Erro ao falar com o Firebase. Veja o console (F12).";
+}
+
+async function loadFromCloud() {
+  setStatus("loading", "Carregando da nuvem...");
+  setLoading(true, "Carregando alunos da nuvem...");
+  try {
+    const snap = await getDocs(collection(db, COL));
+    students = snap.docs.map(d => normalizeStudent(d.id, d.data()));
+    students.sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR"));
+    if (selectedId && !students.find(s => s.id === selectedId)) {
+      selectedId = students[0] ? students[0].id : null;
+    }
+    if (!selectedId && students[0]) selectedId = students[0].id;
+    rememberSelected();
+    cloudReady = true;
+    setStatus("online", "Online · Firebase conectado");
+    renderAll();
+    toast(students.length ? students.length + " aluno(s) carregado(s)" : "Nuvem pronta · nenhum aluno ainda");
+  } catch (err) {
+    console.error(err);
+    cloudReady = false;
+    setStatus("offline", "Erro ao conectar · confira as regras do Firestore");
+    toast(friendlyError(err), true);
+  } finally {
+    setLoading(false);
+  }
+}
+
+async function upsertStudent(st) {
+  await setDoc(doc(db, COL, st.id), studentPayload(st), { merge: true });
+}
+
+async function removeStudentCloud(id) {
+  await deleteDoc(doc(db, COL, id));
+}
+
 document.querySelectorAll(".tab-btn").forEach(btn => {
   btn.addEventListener("click", () => {
     document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
@@ -832,28 +535,25 @@ document.querySelectorAll(".tab-btn").forEach(btn => {
   });
 });
 
-/* ---------- Students UI ---------- */
 function renderStudentsList() {
   const list = document.getElementById("studentsList");
-  const counter = document.getElementById("studentCounter");
-  counter.textContent = `${students.length} / ${MAX_STUDENTS} alunos cadastrados`;
+  document.getElementById("studentCounter").textContent =
+    students.length + " / " + MAX_STUDENTS + " alunos cadastrados";
 
   if (!students.length) {
-    list.innerHTML = `<p class="hint">Nenhum aluno ainda. Cadastre o primeiro ao lado.</p>`;
+    list.innerHTML = '<p class="hint">Nenhum aluno ainda. Cadastre o primeiro ao lado.</p>';
   } else {
     list.innerHTML = students.map(s => {
       const hasTree = !!(s.raizes || s.tronco || s.galhos || (s.sonhos && s.sonhos.length));
-      return `
-        <div class="student-item ${s.id === selectedId ? "selected" : ""}" data-id="${s.id}">
-          <div>
-            <strong>${escapeHtml(s.nome)}</strong>
-            <div class="meta">${escapeHtml([s.turma, s.idade ? s.idade + " anos" : ""].filter(Boolean).join(" · ") || "Sem turma")}</div>
-          </div>
-          <div style="display:flex;gap:6px;align-items:center;">
-            <span class="badge ${hasTree ? "" : "empty"}">${hasTree ? "Árvore pronta" : "Sem árvore"}</span>
-            <button class="btn btn-danger" data-del="${s.id}" style="padding:6px 10px;font-size:.8rem;" title="Excluir">✕</button>
-          </div>
-        </div>`;
+      return (
+        '<div class="student-item ' + (s.id === selectedId ? "selected" : "") + '" data-id="' + s.id + '">' +
+          "<div><strong>" + escapeHtml(s.nome) + "</strong>" +
+          '<div class="meta">' + escapeHtml([s.turma, s.idade ? s.idade + " anos" : ""].filter(Boolean).join(" · ") || "Sem turma") + "</div></div>" +
+          '<div style="display:flex;gap:6px;align-items:center;">' +
+          '<span class="badge ' + (hasTree ? "" : "empty") + '">' + (hasTree ? "Árvore pronta" : "Sem árvore") + "</span>" +
+          '<button class="btn btn-danger" data-del="' + s.id + '" style="padding:6px 10px;font-size:.8rem;" title="Excluir">✕</button>' +
+          "</div></div>"
+      );
     }).join("");
   }
 
@@ -861,25 +561,34 @@ function renderStudentsList() {
     item.addEventListener("click", (e) => {
       if (e.target.closest("[data-del]")) return;
       selectedId = item.dataset.id;
-      save();
+      rememberSelected();
       renderStudentsList();
       syncSelects();
     });
   });
 
   list.querySelectorAll("[data-del]").forEach(btn => {
-    btn.addEventListener("click", (e) => {
+    btn.addEventListener("click", async (e) => {
       e.stopPropagation();
       const id = btn.getAttribute("data-del");
       const st = students.find(x => x.id === id);
       if (!st) return;
-      if (!confirm(`Excluir o aluno "${st.nome}"?`)) return;
-      students = students.filter(x => x.id !== id);
-      if (selectedId === id) selectedId = students[0] ? students[0].id : null;
-      if (editingId === id) editingId = null;
-      save();
-      renderAll();
-      toast("Aluno excluído");
+      if (!confirm('Excluir o aluno "' + st.nome + '" da nuvem?')) return;
+      try {
+        setLoading(true, "Excluindo da nuvem...");
+        await removeStudentCloud(id);
+        students = students.filter(x => x.id !== id);
+        if (selectedId === id) selectedId = students[0] ? students[0].id : null;
+        if (editingId === id) editingId = null;
+        rememberSelected();
+        renderAll();
+        toast("Aluno excluído da nuvem");
+      } catch (err) {
+        console.error(err);
+        toast(friendlyError(err), true);
+      } finally {
+        setLoading(false);
+      }
     });
   });
 
@@ -888,9 +597,10 @@ function renderStudentsList() {
 
 function syncSelects() {
   const opts = students.map(s =>
-    `<option value="${s.id}" ${s.id === selectedId ? "selected" : ""}>${escapeHtml(s.nome)}${s.turma ? " — " + escapeHtml(s.turma) : ""}</option>`
+    '<option value="' + s.id + '"' + (s.id === selectedId ? " selected" : "") + ">" +
+    escapeHtml(s.nome) + (s.turma ? " — " + escapeHtml(s.turma) : "") + "</option>"
   ).join("");
-  const empty = `<option value="">— selecione —</option>`;
+  const empty = '<option value="">— selecione —</option>';
   ["selStudent", "selStudentTree"].forEach(id => {
     const el = document.getElementById(id);
     el.innerHTML = (students.length ? "" : empty) + opts;
@@ -900,53 +610,54 @@ function syncSelects() {
 
 document.getElementById("selStudent").addEventListener("change", (e) => {
   selectedId = e.target.value || null;
-  save();
+  rememberSelected();
   renderStudentsList();
   populateEditor();
 });
 
 document.getElementById("selStudentTree").addEventListener("change", (e) => {
   selectedId = e.target.value || null;
-  save();
+  rememberSelected();
   renderStudentsList();
   renderTree();
 });
 
-document.getElementById("studentForm").addEventListener("submit", (e) => {
+document.getElementById("studentForm").addEventListener("submit", async (e) => {
   e.preventDefault();
+  if (!cloudReady) { toast("Aguarde a conexão com o Firebase", true); return; }
   const nome = document.getElementById("nome").value.trim();
   const turma = document.getElementById("turma").value.trim();
   const idade = document.getElementById("idade").value.trim();
   if (!nome) return;
 
-  if (editingId) {
-    const st = students.find(s => s.id === editingId);
-    if (st) {
-      st.nome = nome;
-      st.turma = turma;
-      st.idade = idade;
+  try {
+    setLoading(true, "Salvando aluno na nuvem...");
+    if (editingId) {
+      const st = students.find(s => s.id === editingId);
+      if (!st) return;
+      st.nome = nome; st.turma = turma; st.idade = idade;
+      await upsertStudent(st);
+      editingId = null;
+      document.getElementById("btnSaveStudent").textContent = "Salvar aluno";
+      toast("Aluno atualizado na nuvem");
+    } else {
+      if (students.length >= MAX_STUDENTS) { toast("Limite de 20 alunos atingido", true); return; }
+      const st = { id: uid(), nome, turma, idade, raizes: "", tronco: "", galhos: "", sonhos: [] };
+      await upsertStudent(st);
+      students.push(st);
+      students.sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR"));
+      selectedId = st.id;
+      rememberSelected();
+      toast("Aluno salvo na nuvem!");
     }
-    editingId = null;
-    toast("Aluno atualizado");
-  } else {
-    if (students.length >= MAX_STUDENTS) {
-      toast("Limite de 20 alunos atingido");
-      return;
-    }
-    const st = {
-      id: uid(),
-      nome, turma, idade,
-      raizes: "", tronco: "", galhos: "",
-      sonhos: []
-    };
-    students.push(st);
-    selectedId = st.id;
-    toast("Aluno cadastrado!");
+    document.getElementById("studentForm").reset();
+    renderAll();
+  } catch (err) {
+    console.error(err);
+    toast(friendlyError(err), true);
+  } finally {
+    setLoading(false);
   }
-
-  document.getElementById("studentForm").reset();
-  save();
-  renderAll();
 });
 
 document.getElementById("btnClearForm").addEventListener("click", () => {
@@ -955,18 +666,9 @@ document.getElementById("btnClearForm").addEventListener("click", () => {
   document.getElementById("btnSaveStudent").textContent = "Salvar aluno";
 });
 
-/* double-click name to edit basic data — via list button style: hold edit on item */
-// Add edit by selecting and a small helper: click badge area — simpler: long press not needed.
-// Provide edit via context: when student selected, form can load with a button.
-const editBtn = document.createElement("button");
-editBtn.type = "button";
-editBtn.className = "btn btn-ghost";
-editBtn.id = "btnLoadEdit";
-editBtn.textContent = "Editar dados do selecionado";
-document.querySelector("#studentForm .btn-row").appendChild(editBtn);
-editBtn.addEventListener("click", () => {
+document.getElementById("btnLoadEdit").addEventListener("click", () => {
   const st = students.find(s => s.id === selectedId);
-  if (!st) { toast("Selecione um aluno na lista"); return; }
+  if (!st) { toast("Selecione um aluno na lista", true); return; }
   editingId = st.id;
   document.getElementById("nome").value = st.nome;
   document.getElementById("turma").value = st.turma || "";
@@ -975,29 +677,22 @@ editBtn.addEventListener("click", () => {
   toast("Editando: " + st.nome);
 });
 
-/* ---------- Dreams picker ---------- */
+document.getElementById("btnReload").addEventListener("click", () => loadFromCloud());
+
 function buildDreamPicker() {
   const box = document.getElementById("dreamCategories");
-  box.innerHTML = DREAMS.map((group, gi) => `
-    <div class="cat">
-      <h3>${group.cat}</h3>
-      <div class="dream-grid">
-        ${group.items.map((item, ii) => {
-          const id = `d_${gi}_${ii}`;
-          return `
-            <label class="dream-opt" data-dream="${escapeAttr(item)}">
-              <input type="checkbox" value="${escapeAttr(item)}" id="${id}" />
-              <span>${escapeHtml(item)}</span>
-            </label>`;
-        }).join("")}
-      </div>
-    </div>
-  `).join("");
+  box.innerHTML = DREAMS.map((group, gi) =>
+    '<div class="cat"><h3>' + group.cat + '</h3><div class="dream-grid">' +
+    group.items.map((item, ii) => {
+      const id = "d_" + gi + "_" + ii;
+      return '<label class="dream-opt"><input type="checkbox" value="' + escapeAttr(item) + '" id="' + id + '" /><span>' + escapeHtml(item) + "</span></label>";
+    }).join("") +
+    "</div></div>"
+  ).join("");
 
   box.querySelectorAll(".dream-opt input").forEach(inp => {
     inp.addEventListener("change", () => {
-      const label = inp.closest(".dream-opt");
-      label.classList.toggle("selected", inp.checked);
+      inp.closest(".dream-opt").classList.toggle("selected", inp.checked);
       updateDreamCount();
     });
   });
@@ -1005,9 +700,9 @@ function buildDreamPicker() {
 
 function updateDreamCount() {
   const n = document.querySelectorAll("#dreamCategories input:checked").length;
-  const note = document.getElementById("dreamCountNote");
-  note.textContent = `${n} sonho${n === 1 ? "" : "s"} selecionado${n === 1 ? "" : "s"}` +
-    (n > MAX_DREAMS_SOFT ? ` — a árvore fica mais legível com até ${MAX_DREAMS_SOFT}` : "");
+  document.getElementById("dreamCountNote").textContent =
+    n + " sonho" + (n === 1 ? "" : "s") + " selecionado" + (n === 1 ? "" : "s") +
+    (n > MAX_DREAMS_SOFT ? " — a árvore fica mais legível com até " + MAX_DREAMS_SOFT : "");
 }
 
 function getSelectedDreams() {
@@ -1040,37 +735,41 @@ function populateEditor() {
   setSelectedDreams(st.sonhos || []);
 }
 
-document.getElementById("btnSaveTree").addEventListener("click", () => {
+document.getElementById("btnSaveTree").addEventListener("click", async () => {
   const st = students.find(s => s.id === selectedId);
-  if (!st) { toast("Selecione um aluno"); return; }
+  if (!st) { toast("Selecione um aluno", true); return; }
+  if (!cloudReady) { toast("Aguarde a conexão com o Firebase", true); return; }
   st.raizes = document.getElementById("raizes").value.trim();
   st.tronco = document.getElementById("tronco").value.trim();
   st.galhos = document.getElementById("galhos").value.trim();
   st.sonhos = getSelectedDreams();
-  save();
-  renderStudentsList();
-  toast("Árvore salva para " + st.nome + "!");
+  try {
+    setLoading(true, "Salvando árvore na nuvem...");
+    await upsertStudent(st);
+    renderStudentsList();
+    toast("Árvore salva na nuvem para " + st.nome + "!");
+  } catch (err) {
+    console.error(err);
+    toast(friendlyError(err), true);
+  } finally {
+    setLoading(false);
+  }
 });
 
 document.getElementById("btnGoTree").addEventListener("click", () => {
   document.querySelector('.tab-btn[data-tab="arvore"]').click();
 });
-
 document.getElementById("btnEditFromTree").addEventListener("click", () => {
   document.querySelector('.tab-btn[data-tab="montar"]').click();
 });
+document.getElementById("btnPrint").addEventListener("click", () => window.print());
 
-document.getElementById("btnPrint").addEventListener("click", () => {
-  window.print();
-});
-
-/* ---------- Tree render ---------- */
 function renderChips(el, items, kind, emptyText) {
   if (!items.length) {
-    el.innerHTML = `<span class="empty-hint">${emptyText}</span>`;
+    el.innerHTML = '<span class="empty-hint">' + emptyText + "</span>";
     return;
   }
-  el.innerHTML = items.map(t => `<span class="chip ${kind}">${escapeHtml(t)}</span>`).join("");
+  el.innerHTML = items.map(t => '<span class="chip ' + kind + '">' + escapeHtml(t) + "</span>").join("");
 }
 
 function renderTree() {
@@ -1084,54 +783,73 @@ function renderTree() {
     renderChips(document.getElementById("chipsLeaves"), [], "leaf", "Ainda sem folhas / sonhos");
     return;
   }
-  nameEl.textContent = `Árvore de ${st.nome}` + (st.turma ? ` · ${st.turma}` : "");
-  renderChips(document.getElementById("chipsRoots"), splitLines(st.raizes), "root", "Preencha “Quem sou eu?”");
+  nameEl.textContent = "Árvore de " + st.nome + (st.turma ? " · " + st.turma : "");
+  renderChips(document.getElementById("chipsRoots"), splitLines(st.raizes), "root", 'Preencha "Quem sou eu?"');
   renderChips(document.getElementById("chipsTrunk"), splitLines(st.tronco), "trunk", "Preencha o que faz para crescer");
   renderChips(document.getElementById("chipsBranches"), splitLines(st.galhos), "branch", "Preencha onde quer chegar");
   renderChips(document.getElementById("chipsLeaves"), st.sonhos || [], "leaf", "Escolha sonhos nas folhas");
 }
 
-/* ---------- Export / Import ---------- */
 document.getElementById("btnExport").addEventListener("click", () => {
-  const blob = new Blob([JSON.stringify({ students, exportedAt: new Date().toISOString() }, null, 2)], { type: "application/json" });
+  const blob = new Blob([JSON.stringify({ students, exportedAt: new Date().toISOString(), source: "firebase" }, null, 2)], { type: "application/json" });
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
-  a.download = "arvore-dos-sonhos.json";
+  a.download = "arvore-dos-sonhos-backup.json";
   a.click();
   URL.revokeObjectURL(a.href);
-  toast("Arquivo exportado");
+  toast("Backup exportado");
 });
 
 document.getElementById("importFile").addEventListener("change", async (e) => {
   const file = e.target.files && e.target.files[0];
   e.target.value = "";
   if (!file) return;
+  if (!cloudReady) { toast("Aguarde a conexão com o Firebase", true); return; }
   try {
     const text = await file.text();
     const data = JSON.parse(text);
     const list = Array.isArray(data.students) ? data.students : (Array.isArray(data) ? data : null);
     if (!list) throw new Error("Formato inválido");
-    if (!confirm(`Importar ${Math.min(list.length, MAX_STUDENTS)} aluno(s)? Isso substitui a lista atual.`)) return;
-    students = list.slice(0, MAX_STUDENTS).map(s => ({
-      id: s.id || uid(),
-      nome: String(s.nome || "Sem nome").slice(0, 60),
-      turma: String(s.turma || "").slice(0, 40),
-      idade: String(s.idade || ""),
-      raizes: String(s.raizes || ""),
-      tronco: String(s.tronco || ""),
-      galhos: String(s.galhos || ""),
-      sonhos: Array.isArray(s.sonhos) ? s.sonhos.map(String) : [],
-    }));
+    if (!confirm("Importar " + Math.min(list.length, MAX_STUDENTS) + " aluno(s) para a NUVEM?\nIsso substitui todos os alunos atuais no Firebase.")) return;
+
+    setLoading(true, "Importando para o Firebase...");
+    const existing = await getDocs(collection(db, COL));
+    let batch = writeBatch(db);
+    let ops = 0;
+    for (const d of existing.docs) {
+      batch.delete(d.ref);
+      ops++;
+      if (ops >= 400) { await batch.commit(); batch = writeBatch(db); ops = 0; }
+    }
+    if (ops) await batch.commit();
+
+    const incoming = list.slice(0, MAX_STUDENTS).map(s => normalizeStudent(s.id || uid(), s));
+    batch = writeBatch(db);
+    ops = 0;
+    for (const st of incoming) {
+      batch.set(doc(db, COL, st.id), {
+        nome: st.nome, turma: st.turma, idade: st.idade,
+        raizes: st.raizes, tronco: st.tronco, galhos: st.galhos, sonhos: st.sonhos,
+        updatedAt: serverTimestamp()
+      });
+      ops++;
+      if (ops >= 400) { await batch.commit(); batch = writeBatch(db); ops = 0; }
+    }
+    if (ops) await batch.commit();
+
+    students = incoming.sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR"));
     selectedId = students[0] ? students[0].id : null;
-    save();
+    rememberSelected();
     renderAll();
-    toast("Importação concluída");
+    toast("Importação enviada para a nuvem");
   } catch (err) {
-    alert("Não foi possível importar o arquivo. Verifique se é um JSON válido.");
+    console.error(err);
+    toast(friendlyError(err), true);
+  } finally {
+    setLoading(false);
   }
 });
 
-/* ---------- helpers ---------- */
 function escapeHtml(s) {
   return String(s)
     .replace(/&/g, "\u0026amp;")
@@ -1150,10 +868,9 @@ function renderAll() {
   renderTree();
 }
 
-/* init */
 buildDreamPicker();
-load();
 renderAll();
+loadFromCloud();
 </script>
 </body>
 </html>
