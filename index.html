@@ -206,7 +206,7 @@
 <div class="app">
   <header>
     <h1>🌳 Árvore dos Sonhos</h1>
-    <p>Cadastre até 20 alunos · dados salvos online no Firebase</p>
+    <p>Cadastro ilimitado de alunos · dados salvos online no Firebase</p>
   </header>
 
   <div class="status-bar no-print">
@@ -224,7 +224,7 @@
   </div>
 
   <section id="panel-alunos" class="panel active">
-    <div class="counter" id="studentCounter">0 / 20 alunos cadastrados</div>
+    <div class="counter" id="studentCounter">0 alunos cadastrados</div>
     <div class="grid-2">
       <div class="card">
         <div class="section-title">Cadastrar aluno</div>
@@ -381,7 +381,6 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const COL = "alunos";
 
-const MAX_STUDENTS = 20;
 const MAX_DREAMS_SOFT = 8;
 const SELECTED_KEY = "arvore-dos-sonhos-selected";
 
@@ -537,8 +536,9 @@ document.querySelectorAll(".tab-btn").forEach(btn => {
 
 function renderStudentsList() {
   const list = document.getElementById("studentsList");
+  const n = students.length;
   document.getElementById("studentCounter").textContent =
-    students.length + " / " + MAX_STUDENTS + " alunos cadastrados";
+    n + (n === 1 ? " aluno cadastrado" : " alunos cadastrados");
 
   if (!students.length) {
     list.innerHTML = '<p class="hint">Nenhum aluno ainda. Cadastre o primeiro ao lado.</p>';
@@ -592,7 +592,7 @@ function renderStudentsList() {
     });
   });
 
-  document.getElementById("btnSaveStudent").disabled = students.length >= MAX_STUDENTS && !editingId;
+  document.getElementById("btnSaveStudent").disabled = false;
 }
 
 function syncSelects() {
@@ -641,7 +641,6 @@ document.getElementById("studentForm").addEventListener("submit", async (e) => {
       document.getElementById("btnSaveStudent").textContent = "Salvar aluno";
       toast("Aluno atualizado na nuvem");
     } else {
-      if (students.length >= MAX_STUDENTS) { toast("Limite de 20 alunos atingido", true); return; }
       const st = { id: uid(), nome, turma, idade, raizes: "", tronco: "", galhos: "", sonhos: [] };
       await upsertStudent(st);
       students.push(st);
@@ -810,7 +809,7 @@ document.getElementById("importFile").addEventListener("change", async (e) => {
     const data = JSON.parse(text);
     const list = Array.isArray(data.students) ? data.students : (Array.isArray(data) ? data : null);
     if (!list) throw new Error("Formato inválido");
-    if (!confirm("Importar " + Math.min(list.length, MAX_STUDENTS) + " aluno(s) para a NUVEM?\nIsso substitui todos os alunos atuais no Firebase.")) return;
+    if (!confirm("Importar " + list.length + " aluno(s) para a NUVEM?\nIsso substitui todos os alunos atuais no Firebase.")) return;
 
     setLoading(true, "Importando para o Firebase...");
     const existing = await getDocs(collection(db, COL));
@@ -823,7 +822,7 @@ document.getElementById("importFile").addEventListener("change", async (e) => {
     }
     if (ops) await batch.commit();
 
-    const incoming = list.slice(0, MAX_STUDENTS).map(s => normalizeStudent(s.id || uid(), s));
+    const incoming = list.map(s => normalizeStudent(s.id || uid(), s));
     batch = writeBatch(db);
     ops = 0;
     for (const st of incoming) {
